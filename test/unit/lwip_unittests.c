@@ -3,6 +3,8 @@
 #include "udp/test_udp.h"
 #include "tcp/test_tcp.h"
 #include "tcp/test_tcp_oos.h"
+#include "core/test_mem.h"
+#include "etharp/test_etharp.h"
 
 #include "lwip/init.h"
 
@@ -16,6 +18,8 @@ int main()
     udp_suite,
     tcp_suite,
     tcp_oos_suite,
+    mem_suite,
+    etharp_suite
   };
   size_t num = sizeof(suites)/sizeof(void*);
   LWIP_ASSERT("No suites defined", num > 0);
@@ -39,4 +43,3 @@ int main()
   srunner_free(sr);
   return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-

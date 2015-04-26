@@ -33,12 +33,12 @@
 #ifndef __LWIP_IP_FRAG_H__
 #define __LWIP_IP_FRAG_H__
 
-#include "opt.h"
-#include "err.h"
-#include "pbuf.h"
-#include "netif.h"
-#include "ip_addr.h"
-#include "ip.h"
+#include "lwip/opt.h"
+#include "lwip/err.h"
+#include "lwip/pbuf.h"
+#include "lwip/netif.h"
+#include "lwip/ip_addr.h"
+#include "lwip/ip.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,7 +66,19 @@ struct pbuf * ip_reass(struct pbuf *p);
 #endif /* IP_REASSEMBLY */
 
 #if IP_FRAG
-err_t ip_frag(struct pbuf *p, struct netif *netif, struct ip_addr *dest);
+#if !IP_FRAG_USES_STATIC_BUF && !LWIP_NETIF_TX_SINGLE_PBUF
+/** A custom pbuf that holds a reference to another pbuf, which is freed
+ * when this custom pbuf is freed. This is used to create a custom PBUF_REF
+ * that points into the original pbuf. */
+struct pbuf_custom_ref {
+  /** 'base class' */
+  struct pbuf_custom pc;
+  /** pointer to the original pbuf that is referenced */
+  struct pbuf *original;
+};
+#endif /* !IP_FRAG_USES_STATIC_BUF && !LWIP_NETIF_TX_SINGLE_PBUF */
+
+err_t ip_frag(struct pbuf *p, struct netif *netif, ip_addr_t *dest);
 #endif /* IP_FRAG */
 
 #ifdef __cplusplus

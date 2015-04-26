@@ -32,8 +32,9 @@
 #ifndef __LWIP_DEBUG_H__
 #define __LWIP_DEBUG_H__
 
-#include "arch.h"
- 
+#include "lwip/arch.h"
+#include "lwip/opt.h"
+
 /** lower two bits indicate debug level
  * - 0 all
  * - 1 warning
@@ -61,9 +62,6 @@
 /** flag for LWIP_DEBUGF to halt after printing this debug message */
 #define LWIP_DBG_HALT          0x08U
 
-
-#define LWIP_NOASSERT
-
 #ifndef LWIP_NOASSERT
 #define LWIP_ASSERT(message, assertion) do { if(!(assertion)) \
   LWIP_PLATFORM_ASSERT(message); } while(0)
@@ -72,13 +70,10 @@
 #endif /* LWIP_NOASSERT */
 
 /** if "expression" isn't true, then print "message" and execute "handler" expression */
-#ifndef LWIP_NOERROR
+#ifndef LWIP_ERROR
 #define LWIP_ERROR(message, expression, handler) do { if (!(expression)) { \
   LWIP_PLATFORM_ASSERT(message); handler;}} while(0)
-#else  /* LWIP_NOASSERT */
-#define LWIP_ERROR(message, expression, handler)
-#endif /* LWIP_NOASSERT */
-
+#endif /* LWIP_ERROR */
 
 #ifdef LWIP_DEBUG
 /** print debug message only if debug message type is enabled...
@@ -101,4 +96,4 @@
 #endif /* LWIP_DEBUG */
 
 #endif /* __LWIP_DEBUG_H__ */
-															  
+
